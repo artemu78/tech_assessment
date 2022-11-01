@@ -16,11 +16,12 @@
   text-align: center;
 }
 
-#app > main {
+.app > main {
   grid-area: main;
-  padding: 15px 5px 10px 5px;
+  padding: 10px;
 }
 
-#app > footer {
+.app > footer {
   grid-area: footer;
+  padding: 10px;
 }
