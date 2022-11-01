@@ -40,10 +40,11 @@ const LangContext = React.createContext<ContestProps>({value: prog_lang, change:
 const LangProvider = ({ children }: Props) => {
   const [value, setLang] = useState<string>(prog_lang);
   const change = (lang: string): void => setLang(lang);
+
   return (
-    <ThemeContext.Provider value={{ change, value }}>
+    <LangContext.Provider value={{ change, value }}>
       {children}
-    </ThemeContext.Provider>
+    </LangContext.Provider>
   );
 }
 
