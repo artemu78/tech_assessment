@@ -28,24 +28,19 @@ const ThemeContext = React.createContext<ContestProps | null>(null);
 const ThemeProvider = ({ children }: Props) => {
   const [value, setTheme] = useState<string>("light");
   const change = (theme: string): void => setTheme(theme);
-  return (
-    <ThemeContext.Provider value={{ change, value }}>
-      {children}
-    </ThemeContext.Provider>
-  );
+  return <ThemeContext.Provider value={{ change, value }}>{children}</ThemeContext.Provider>;
 };
 
-const LangContext = React.createContext<ContestProps>({value: prog_lang, change: () => {}});
+const LangContext = React.createContext<ContestProps>({
+  value: prog_lang,
+  change: () => {},
+});
 
 const LangProvider = ({ children }: Props) => {
   const [value, setLang] = useState<string>(prog_lang);
   const change = (lang: string): void => setLang(lang);
 
-  return (
-    <LangContext.Provider value={{ change, value }}>
-      {children}
-    </LangContext.Provider>
-  );
-}
+  return <LangContext.Provider value={{ change, value }}>{children}</LangContext.Provider>;
+};
 
 export { ThemeProvider, ThemeContext, LangProvider, LangContext };

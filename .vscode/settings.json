@@ -1,0 +1,10 @@
+{
+  "stylelint.validate": ["css", "scss"],
+  "eslint.options": {
+    "rules": {
+      "prettier/prettier": "off"
+    }
+  },
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
+}
