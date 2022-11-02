@@ -1,11 +1,8 @@
 import React, { useState } from "react";
 import { getCookie } from "tools";
+import { Langs, IContestProps, ILangContext, IProps, IQuestionsContestProps } from "./types";
 
-const prog_lang = getCookie("prog_lang");
-
-interface Props {
-  children: JSX.Element;
-}
+const prog_lang = getCookie("prog_lang") as Langs;
 
 export const themes = {
   light: {
@@ -18,29 +15,45 @@ export const themes = {
   },
 };
 
-interface ContestProps {
-  change: (theme: string) => void;
-  value: string;
-}
+const ThemeContext = React.createContext<IContestProps | null>(null);
 
-const ThemeContext = React.createContext<ContestProps | null>(null);
-
-const ThemeProvider = ({ children }: Props) => {
+const ThemeProvider = ({ children }: IProps) => {
   const [value, setTheme] = useState<string>("light");
   const change = (theme: string): void => setTheme(theme);
   return <ThemeContext.Provider value={{ change, value }}>{children}</ThemeContext.Provider>;
 };
 
-const LangContext = React.createContext<ContestProps>({
-  value: prog_lang,
+const LangContext = React.createContext<ILangContext>({
+  language: prog_lang,
   change: () => {},
 });
 
-const LangProvider = ({ children }: Props) => {
-  const [value, setLang] = useState<string>(prog_lang);
-  const change = (lang: string): void => setLang(lang);
+const LangProvider = ({ children }: IProps) => {
+  const [language, setLang] = useState<Langs>(prog_lang);
+  const change = (lang: Langs): void => setLang(lang);
 
-  return <LangContext.Provider value={{ change, value }}>{children}</LangContext.Provider>;
+  return <LangContext.Provider value={{ change, language }}>{children}</LangContext.Provider>;
 };
 
-export { ThemeProvider, ThemeContext, LangProvider, LangContext };
+const QuestionsContext = React.createContext<IQuestionsContestProps>({
+  questions: {},
+  change: () => {},
+});
+
+const QuestionsProvider = ({ children }: IProps) => {
+  const [questions, setQuestions] = useState<{}>({});
+  const change = (questions: {}): void => setQuestions(questions);
+
+  return (
+    <QuestionsContext.Provider value={{ change, questions }}>{children}</QuestionsContext.Provider>
+  );
+};
+
+export {
+  ThemeProvider,
+  ThemeContext,
+  LangProvider,
+  LangContext,
+  QuestionsProvider,
+  QuestionsContext,
+};

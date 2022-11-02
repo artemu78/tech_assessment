@@ -1,3 +1,5 @@
+import { Langs } from "hooks/types";
+
 export const getCookie = (cname: string): string => {
   let name = cname + "=";
   let decodedCookie = decodeURIComponent(document.cookie);
@@ -14,7 +16,7 @@ export const getCookie = (cname: string): string => {
   return "";
 };
 
-export function setCookie(cname: string, cvalue: string, exdays: number | null = null): void {
+export function setCookie(cname: string, cvalue: Langs, exdays: number | null = null): void {
   let expires = "";
   if (exdays) {
     const d = new Date();
@@ -22,4 +24,11 @@ export function setCookie(cname: string, cvalue: string, exdays: number | null =
     expires = "expires=" + d.toUTCString();
   }
   document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+export function parse(lines: string) {
+  const linesArr = lines.split("\n");
+  linesArr.forEach((rawline) => {
+    const line = rawline.trim();
+  });
 }

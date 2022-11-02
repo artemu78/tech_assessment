@@ -9,29 +9,30 @@ import { LangContext } from "hooks/usecontext";
 
 const LangSelector = () => {
   // const [ language, setLanguageState ] = useState("");
-  const { value, change } = useContext(LangContext);
+  const { language, change } = useContext(LangContext);
   const setLanguage = (someshit: SelectChangeEvent) => {
     const shit = (someshit?.target as any)?.value;
     // setLanguageState(shit);
     setCookie("prog_lang", shit);
-    shit !== value && change(shit);
+    shit !== language && change(shit);
   };
 
   return (
     <Box sx={{ minWidth: 120, width: 200 }}>
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Choose assessment language</InputLabel>
+        <InputLabel id="demo-simple-select-label">Choose assessment</InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           label="Choose assessment language"
           onChange={setLanguage}
-          value={value}
+          value={language || undefined}
         >
           <MenuItem value={"react"}>React</MenuItem>
           <MenuItem value={"css"}>CSS</MenuItem>
           <MenuItem value={"html"}>HTML</MenuItem>
           <MenuItem value={"javascript"}>Javascript</MenuItem>
+          <MenuItem value={"frontend"}>Frontend</MenuItem>
         </Select>
       </FormControl>
     </Box>

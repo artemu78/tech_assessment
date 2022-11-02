@@ -3,6 +3,7 @@ import LangSelector from "./components/lang_selector";
 import QuestionsAnswers from "./components/questionsanswers";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import { QuestionsProvider } from "hooks/usecontext";
 
 function App() {
   return (
@@ -10,7 +11,9 @@ function App() {
       <Header />
       <main>
         <LangSelector />
-        <QuestionsAnswers />
+        <QuestionsProvider>
+          <QuestionsAnswers />
+        </QuestionsProvider>
       </main>
       <Footer />
     </div>
