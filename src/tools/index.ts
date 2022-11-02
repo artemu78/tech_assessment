@@ -1,4 +1,4 @@
-import { Langs } from "hooks/types";
+import { Langs, IQuestion, EMode } from "hooks/types";
 
 const QUESTION_PREFIX = "####";
 const ANSWER_PREFIX = "- [";
@@ -29,24 +29,26 @@ export function setCookie(cname: string, cvalue: Langs, exdays: number | null = 
   document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
-interface IQuestion {
-  question: string;
-  description: string[];
-  answers: string[];
-  explanation: string[];
+function parseQuestionLine(line: string): string {
+  const parsedArray = line.match(/([q,Q]\d+\.\s)(.*)/);
+  if (parsedArray && parsedArray.length === 3) {
+    return parsedArray[2];
+  }
+  return line;
 }
 
-enum EMode {
-  question,
-  description,
-  answers,
-  explanation,
+function parseAnswerLine(line: string): string {
+  const parsedArray = line.split("] ");
+  if (parsedArray && parsedArray.length === 2) {
+    return parsedArray[1];
+  }
+  return line;
 }
 
-export function parse(lines: string): IQuestion[] {
+export function parseRawMDFile(lines: string): IQuestion[] {
   const linesArr = lines.split("\n");
-  const questions: IQuestion[] = [];
-  let question: IQuestion | null = null;
+  const quiz: IQuestion[] = [];
+  let quizItem: IQuestion | null = null;
   let mode = EMode.question;
 
   linesArr.forEach((rawline) => {
@@ -55,9 +57,9 @@ export function parse(lines: string): IQuestion[] {
     const isAnswer = (line: string): boolean => line.substring(0, 3) === ANSWER_PREFIX;
 
     if (isQuestions(line)) {
-      question && questions.push(question);
-      question = {
-        question: line.substring(5),
+      quizItem && quiz.push(quizItem);
+      quizItem = {
+        question: parseQuestionLine(line.substring(5)),
         explanation: [],
         answers: [],
         description: [],
@@ -66,19 +68,19 @@ export function parse(lines: string): IQuestion[] {
     }
 
     if (isAnswer(line)) {
-      question && question.answers.push(line);
+      quizItem && quizItem.answers.push(parseAnswerLine(line));
     }
 
     if (!isAnswer(line) && !isQuestions(line)) {
-      if (mode === EMode.question) question?.explanation.push(line);
-      if (mode === EMode.answers && question)
-        question.answers[question.answers.length - 1] += "\n" + line;
+      if (mode === EMode.question) quizItem?.explanation.push(line);
+      if (mode === EMode.answers && quizItem)
+        quizItem.answers[quizItem.answers.length - 1] += "\n" + line;
       if (mode === EMode.answers && line === "") {
         mode = EMode.explanation;
       }
-      if (mode === EMode.explanation) question?.explanation.push(line);
+      if (mode === EMode.explanation) quizItem?.explanation.push(line);
     }
   });
-  question && questions.push(question);
-  return questions;
+  quizItem && quiz.push(quizItem);
+  return quiz;
 }

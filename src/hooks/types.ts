@@ -20,7 +20,23 @@ export interface IProps {
   children: JSX.Element;
 }
 
+export enum EMode {
+  question = "question",
+  description = "description",
+  answers = "answers",
+  explanation = "explanation",
+}
+
+export type IQuestions = Partial<Record<Langs, IQuestion[]>>;
+
 export interface IQuestionsContestProps {
-  change: (theme: string) => void;
-  questions: { [key: string]: string };
+  change: (questions: IQuestions) => void;
+  questions: IQuestions;
+}
+
+export interface IQuestion {
+  question: string;
+  description: string[];
+  answers: string[];
+  explanation: string[];
 }

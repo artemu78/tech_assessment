@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import { getCookie } from "tools";
-import { Langs, IContestProps, ILangContext, IProps, IQuestionsContestProps } from "./types";
+import {
+  Langs,
+  IContestProps,
+  ILangContext,
+  IProps,
+  IQuestionsContestProps,
+  IQuestion,
+  IQuestions,
+} from "./types";
 
 const prog_lang = getCookie("prog_lang") as Langs;
 
@@ -41,8 +49,8 @@ const QuestionsContext = React.createContext<IQuestionsContestProps>({
 });
 
 const QuestionsProvider = ({ children }: IProps) => {
-  const [questions, setQuestions] = useState<{}>({});
-  const change = (questions: {}): void => setQuestions(questions);
+  const [questions, setQuestions] = useState<IQuestions>({});
+  const change = (questions: IQuestions): void => setQuestions(questions);
 
   return (
     <QuestionsContext.Provider value={{ change, questions }}>{children}</QuestionsContext.Provider>
