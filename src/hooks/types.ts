@@ -27,16 +27,22 @@ export enum EMode {
   explanation = "explanation",
 }
 
-export type IQuestions = Partial<Record<Langs, IQuestion[]>>;
+export type IQuestions = Partial<Record<Langs, IQuizItem[]>>;
 
 export interface IQuestionsContestProps {
   change: (questions: IQuestions) => void;
   questions: IQuestions;
 }
 
-export interface IQuestion {
+export interface IQuizItem {
   question: string;
   description: string[];
-  answers: string[];
+  answers: IAnswer[];
   explanation: string[];
+}
+
+export interface IAnswer {
+  isCorrect: boolean;
+  text: string;
+  description: string;
 }

@@ -1,4 +1,4 @@
-import { Langs, IQuestion, EMode } from "hooks/types";
+import { Langs, IQuizItem, EMode, IAnswer } from "hooks/types";
 
 const QUESTION_PREFIX = "####";
 const ANSWER_PREFIX = "- [";
@@ -29,35 +29,48 @@ export function setCookie(cname: string, cvalue: Langs, exdays: number | null = 
   document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
-function parseQuestionLine(line: string): string {
+const parseQuestionLine = (line: string): string => {
   const parsedArray = line.match(/([q,Q]\d+\.\s)(.*)/);
   if (parsedArray && parsedArray.length === 3) {
     return parsedArray[2];
   }
   return line;
-}
+};
 
-function parseAnswerLine(line: string): string {
-  const parsedArray = line.split("] ");
-  if (parsedArray && parsedArray.length === 2) {
-    return parsedArray[1];
+const parseAnswerLine = (line: string): string => {
+  const parsedArray = line.match(/(\]\s)(.*)/);
+  if (parsedArray && parsedArray.length === 3) {
+    return parsedArray[2];
   }
   return line;
-}
+};
 
-export function parseRawMDFile(lines: string): IQuestion[] {
+const isAnswerCorrect = (line: string): boolean => {
+  const parsedArray = line.match(/(\[\s?x\s?\])/);
+  if (parsedArray && parsedArray.length > 1) {
+    return true;
+  }
+  return false;
+};
+
+export function parseRawMDFile(lines: string): IQuizItem[] {
   const linesArr = lines.split("\n");
-  const quiz: IQuestion[] = [];
-  let quizItem: IQuestion | null = null;
+  const quiz: IQuizItem[] = [];
+  let quizItem: IQuizItem | null = null;
   let mode = EMode.question;
+  let answer: IAnswer | null = null;
 
-  linesArr.forEach((rawline) => {
+  linesArr.forEach((rawline, lineindex) => {
+    console.log(mode, lineindex);
     const line = rawline.trim();
     const isQuestions = (line: string): boolean => line.substring(0, 4) === QUESTION_PREFIX;
     const isAnswer = (line: string): boolean => line.substring(0, 3) === ANSWER_PREFIX;
 
     if (isQuestions(line)) {
-      quizItem && quiz.push(quizItem);
+      quizItem && answer && quizItem.answers.push({ ...answer });
+      answer = null;
+      quizItem && quiz.push({ ...quizItem });
+
       quizItem = {
         question: parseQuestionLine(line.substring(5)),
         explanation: [],
@@ -68,17 +81,23 @@ export function parseRawMDFile(lines: string): IQuestion[] {
     }
 
     if (isAnswer(line)) {
-      quizItem && quizItem.answers.push(parseAnswerLine(line));
+      quizItem && answer && quizItem.answers.push({ ...answer });
+      answer = {
+        text: parseAnswerLine(line),
+        description: "",
+        isCorrect: isAnswerCorrect(line),
+      };
+      mode = EMode.answers;
     }
 
     if (!isAnswer(line) && !isQuestions(line)) {
       if (mode === EMode.question) quizItem?.explanation.push(line);
-      if (mode === EMode.answers && quizItem)
-        quizItem.answers[quizItem.answers.length - 1] += "\n" + line;
+      if (mode === EMode.answers && answer) answer.description += "\n" + line;
       if (mode === EMode.answers && line === "") {
-        mode = EMode.explanation;
+        mode = EMode.description;
       }
       if (mode === EMode.explanation) quizItem?.explanation.push(line);
+      if (mode === EMode.description) quizItem?.description.push(line);
     }
   });
   quizItem && quiz.push(quizItem);

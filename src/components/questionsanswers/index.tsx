@@ -1,10 +1,11 @@
-import React, { useEffect, useContext, useState } from "react";
+import { useEffect, useContext, useState } from "react";
 import { LangContext, QuestionsContext } from "hooks/usecontext";
 import { files } from "tools/const";
-import { Langs, IQuestion } from "hooks/types";
+import { Langs, IQuizItem } from "hooks/types";
 import { parseRawMDFile } from "tools";
+import { QuizItem } from "./quizitem";
 
-const fetchQuestions = async (lang: Langs): Promise<IQuestion[] | null> => {
+const fetchQuestions = async (lang: Langs): Promise<IQuizItem[] | null> => {
   const url = files[lang];
   let response;
   try {
@@ -44,23 +45,8 @@ const Questionsanswers = (): JSX.Element => {
     <div>
       {language &&
         questions[language]?.map((question, index) => {
-          return <SingleQuizItem key={index + question.question} quizItem={question} />;
+          return <QuizItem key={index + question.question} quizItem={question} />;
         })}
-    </div>
-  );
-};
-
-const SingleQuizItem = ({ quizItem }: { quizItem: IQuestion }): JSX.Element => {
-  return (
-    <div>
-      <h2>{quizItem.question}</h2>
-      <code>{quizItem.description}</code>
-      <ul>
-        {quizItem.answers.map((answer) => {
-          return <li>{answer}</li>;
-        })}
-      </ul>
-      <code>{quizItem.explanation}</code>
     </div>
   );
 };

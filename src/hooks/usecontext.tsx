@@ -6,7 +6,6 @@ import {
   ILangContext,
   IProps,
   IQuestionsContestProps,
-  IQuestion,
   IQuestions,
 } from "./types";
 
