@@ -5,11 +5,15 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { setCookie } from "tools";
-import { LangContext } from "hooks/usecontext";
+import { files } from "tools/const";
+import { LangContext, QuestionsContext } from "hooks/usecontext";
+import styles from "./styles.module.css";
 
 const LangSelector = () => {
   // const [ language, setLanguageState ] = useState("");
   const { language, change } = useContext(LangContext);
+  const { questions } = useContext(QuestionsContext);
+
   const setLanguage = (someshit: SelectChangeEvent) => {
     const shit = (someshit?.target as any)?.value;
     // setLanguageState(shit);
@@ -17,9 +21,16 @@ const LangSelector = () => {
     shit !== language && change(shit);
   };
 
+  const menuItems = [];
+
+  for (let code in files) {
+    const name = files[code as keyof typeof files].name;
+    menuItems.push(<MenuItem value={code}>{name || "no name"}</MenuItem>);
+  }
+
   return (
-    <Box sx={{ minWidth: 120, width: 200 }}>
-      <FormControl fullWidth>
+    <div className={styles.container}>
+      <FormControl sx={{ minWidth: 120, width: 300 }}>
         <InputLabel id="demo-simple-select-label">Choose assessment</InputLabel>
         <Select
           labelId="demo-simple-select-label"
@@ -28,14 +39,11 @@ const LangSelector = () => {
           onChange={setLanguage}
           value={language || undefined}
         >
-          <MenuItem value={"react"}>React</MenuItem>
-          <MenuItem value={"css"}>CSS</MenuItem>
-          <MenuItem value={"html"}>HTML</MenuItem>
-          <MenuItem value={"javascript"}>Javascript</MenuItem>
-          <MenuItem value={"frontend"}>Frontend</MenuItem>
+          {menuItems}
         </Select>
       </FormControl>
-    </Box>
+      <div>{questions[language]?.length}</div>
+    </div>
   );
 };
 

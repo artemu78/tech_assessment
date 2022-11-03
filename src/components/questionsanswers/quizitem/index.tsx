@@ -1,13 +1,41 @@
 import { useState } from "react";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import { IQuizItem } from "hooks/types";
+import { Checkbox, FormControlLabel, FormGroup, Icon } from "@mui/material";
+import cn from "classnames";
+import CheckIcon from "@mui/icons-material/Check";
+import DangerousIcon from "@mui/icons-material/Dangerous";
+import { IQuizItem, IAnswer } from "hooks/types";
 import styles from "./styles.module.css";
+
+enum EquizItemState {
+  NEW,
+  RIGHT,
+  WRONG,
+}
+
 export const QuizItem = ({ quizItem }: { quizItem: IQuizItem }): JSX.Element => {
+  const [quizItemState, setQuizItemState] = useState<EquizItemState>(EquizItemState.NEW);
+
+  const onChange = (answerItem: IAnswer) => {
+    return () => {
+      if (quizItemState !== EquizItemState.NEW) return;
+      if (answerItem.isCorrect) setQuizItemState(EquizItemState.RIGHT);
+      else setQuizItemState(EquizItemState.WRONG);
+    };
+  };
+
+  let icon;
+  if (quizItemState === EquizItemState.NEW) icon = null;
+  if (quizItemState === EquizItemState.WRONG) icon = <DangerousIcon />;
+  if (quizItemState === EquizItemState.RIGHT) icon = <CheckIcon />;
+
+  const itemStateIsNew = quizItemState === EquizItemState.NEW;
   return (
     <div>
-      <h2>{quizItem.question}</h2>
+      <h2>
+        <>
+          {icon} {quizItem.question}
+        </>
+      </h2>
       <code>
         <pre>{quizItem.explanation.join("\n")}</pre>
       </code>
@@ -15,10 +43,20 @@ export const QuizItem = ({ quizItem }: { quizItem: IQuizItem }): JSX.Element => 
         <ul>
           {quizItem.answers.map((answer, index) => {
             return (
-              <li key={index + answer.text} className={styles.quizitem}>
+              <li
+                key={index + answer.text}
+                className={cn({ [styles.highlight]: itemStateIsNew })}
+                onClick={onChange(answer)}
+              >
                 <FormControlLabel
-                  control={<Checkbox checked={answer.isCorrect || false} />}
-                  label={answer.text}
+                  control={
+                    <Checkbox
+                      checked={(answer.isCorrect && !itemStateIsNew) || false}
+                      disabled={!itemStateIsNew}
+                    />
+                  }
+                  label={answer.isCorrect.toString() + answer.text}
+                  disabled={!itemStateIsNew}
                 />
                 <br />
                 {answer.description}
@@ -28,7 +66,9 @@ export const QuizItem = ({ quizItem }: { quizItem: IQuizItem }): JSX.Element => 
         </ul>
       </FormGroup>
       <code>
-        <pre>{quizItem.description.join("\n")}</pre>
+        {quizItem.description.map((descrLine) => (
+          <div>{descrLine}</div>
+        ))}
       </code>
     </div>
   );

@@ -44,7 +44,7 @@ const LangProvider = ({ children }: IProps) => {
 
 const QuestionsContext = React.createContext<IQuestionsContestProps>({
   questions: {},
-  change: () => {},
+  change: (questions: IQuestions) => {},
 });
 
 const QuestionsProvider = ({ children }: IProps) => {

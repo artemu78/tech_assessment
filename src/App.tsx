@@ -10,9 +10,11 @@ function App() {
     <div className={styles.app}>
       <Header />
       <main>
-        <LangSelector />
         <QuestionsProvider>
-          <QuestionsAnswers />
+          <>
+            <LangSelector />
+            <QuestionsAnswers />
+          </>
         </QuestionsProvider>
       </main>
       <Footer />

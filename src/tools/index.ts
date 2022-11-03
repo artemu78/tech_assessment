@@ -9,10 +9,10 @@ export const getCookie = (cname: string): string => {
   let ca = decodedCookie.split(";");
   for (let i = 0; i < ca.length; i++) {
     let c = ca[i];
-    while (c.charAt(0) == " ") {
+    while (c.charAt(0) === " ") {
       c = c.substring(1);
     }
-    if (c.indexOf(name) == 0) {
+    if (c.indexOf(name) === 0) {
       return c.substring(name.length, c.length);
     }
   }
@@ -61,7 +61,7 @@ export function parseRawMDFile(lines: string): IQuizItem[] {
   let answer: IAnswer | null = null;
 
   linesArr.forEach((rawline, lineindex) => {
-    console.log(mode, lineindex);
+    // console.log(mode, lineindex);
     const line = rawline.trim();
     const isQuestions = (line: string): boolean => line.substring(0, 4) === QUESTION_PREFIX;
     const isAnswer = (line: string): boolean => line.substring(0, 3) === ANSWER_PREFIX;

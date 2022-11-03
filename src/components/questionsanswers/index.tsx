@@ -1,4 +1,4 @@
-import { useEffect, useContext, useState } from "react";
+import { useEffect, useContext } from "react";
 import { LangContext, QuestionsContext } from "hooks/usecontext";
 import { files } from "tools/const";
 import { Langs, IQuizItem } from "hooks/types";
@@ -6,7 +6,7 @@ import { parseRawMDFile } from "tools";
 import { QuizItem } from "./quizitem";
 
 const fetchQuestions = async (lang: Langs): Promise<IQuizItem[] | null> => {
-  const url = files[lang];
+  const url = files[lang].url;
   let response;
   try {
     response = await fetch(url);
@@ -33,13 +33,10 @@ const Questionsanswers = (): JSX.Element => {
     if (!langQuiz) {
       fetchQuestions(language).then((quiz) => {
         questions[language] = quiz || undefined;
-        change(questions);
+        change({ ...questions });
       });
     }
-  }, [language]);
-
-  console.log(questions[language], "questions[language]");
-  console.log(language, "language");
+  }, [language, change, questions]);
 
   return (
     <div>
