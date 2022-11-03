@@ -7,6 +7,10 @@ import {
   IProps,
   IQuestionsContestProps,
   IQuestions,
+  IResults,
+  IResultsByLang,
+  IQuizItemResult,
+  EquizItemState,
 } from "./types";
 
 const prog_lang = getCookie("prog_lang") as Langs;
@@ -56,6 +60,31 @@ const QuestionsProvider = ({ children }: IProps) => {
   );
 };
 
+const ResultsContext = React.createContext<IResults>({
+  change: (lang: string, index: number, result: IQuizItemResult) => {},
+  init: (lang: string) => {},
+});
+
+const ResultsProvider = ({ children }: IProps) => {
+  const [results, setResults] = useState<IResultsByLang>({});
+  const change = (lang: string, index: number, result: IQuizItemResult): void => {
+    results[lang][index] = result;
+    setResults({ ...results });
+  };
+  const init = (lang: string) => {
+    if (!results[lang]) {
+      results[lang] = [];
+      setResults({ ...results });
+    }
+  };
+
+  return (
+    <ResultsContext.Provider value={{ ...results, change, init }}>
+      {children}
+    </ResultsContext.Provider>
+  );
+};
+
 export {
   ThemeProvider,
   ThemeContext,
@@ -63,4 +92,6 @@ export {
   LangContext,
   QuestionsProvider,
   QuestionsContext,
+  ResultsProvider,
+  ResultsContext,
 };

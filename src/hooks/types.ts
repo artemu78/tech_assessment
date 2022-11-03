@@ -20,11 +20,18 @@ export interface IProps {
   children: JSX.Element;
 }
 
-export enum EMode {
+export enum EParsePartition {
   question = "question",
   description = "description",
   answers = "answers",
   explanation = "explanation",
+}
+
+export enum EquizItemState {
+  NEW,
+  RIGHT,
+  WRONG,
+  SKIPPED,
 }
 
 export type IQuestions = Partial<Record<Langs, IQuizItem[]>>;
@@ -45,4 +52,28 @@ export interface IAnswer {
   isCorrect: boolean;
   text: string;
   description: string;
+}
+
+export interface IQuizItemResult {
+  result: EquizItemState;
+  answer: number;
+  duration?: number;
+}
+export interface IResultsByLang {
+  [key: string]: IQuizItemResult[];
+}
+
+interface IResults2 {
+  change: (lang: string, index: number, result: IQuizItemResult) => void;
+}
+
+// export type IResults = IResultsByLang | IResults2;
+
+export interface IResults {
+  [key: string]:
+    | IQuizItemResult[]
+    | ((lang: string, index: number, result: IQuizItemResult) => void)
+    | ((lang: string) => void);
+  change: (lang: string, index: number, result: IQuizItemResult) => void;
+  init: (lang: string) => void;
 }

@@ -1,25 +1,32 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Checkbox, FormControlLabel, FormGroup, Icon } from "@mui/material";
 import cn from "classnames";
 import CheckIcon from "@mui/icons-material/Check";
 import DangerousIcon from "@mui/icons-material/Dangerous";
-import { IQuizItem, IAnswer } from "hooks/types";
+import { IQuizItem, IAnswer, EquizItemState, IQuizItemResult } from "hooks/types";
+import { ResultsContext, LangContext } from "hooks/usecontext";
 import styles from "./styles.module.css";
 
-enum EquizItemState {
-  NEW,
-  RIGHT,
-  WRONG,
+interface Props {
+  quizItem: IQuizItem;
+  questionIndex: number;
 }
 
-export const QuizItem = ({ quizItem }: { quizItem: IQuizItem }): JSX.Element => {
+export const QuizItem = ({ quizItem, questionIndex }: Props): JSX.Element => {
+  const answersResults = useContext(ResultsContext);
+  const { language } = useContext(LangContext);
   const [quizItemState, setQuizItemState] = useState<EquizItemState>(EquizItemState.NEW);
 
-  const onChange = (answerItem: IAnswer) => {
+  const onChange = (answerItem: IAnswer, index: number) => {
     return () => {
       if (quizItemState !== EquizItemState.NEW) return;
       if (answerItem.isCorrect) setQuizItemState(EquizItemState.RIGHT);
       else setQuizItemState(EquizItemState.WRONG);
+      const answerResult: IQuizItemResult = {
+        result: answerItem.isCorrect ? EquizItemState.RIGHT : EquizItemState.WRONG,
+        answer: index,
+      };
+      answersResults.change(language, index, answerResult);
     };
   };
 
@@ -46,7 +53,7 @@ export const QuizItem = ({ quizItem }: { quizItem: IQuizItem }): JSX.Element => 
               <li
                 key={index + answer.text}
                 className={cn({ [styles.highlight]: itemStateIsNew })}
-                onClick={onChange(answer)}
+                onClick={onChange(answer, index)}
               >
                 <FormControlLabel
                   control={
@@ -66,8 +73,8 @@ export const QuizItem = ({ quizItem }: { quizItem: IQuizItem }): JSX.Element => 
         </ul>
       </FormGroup>
       <code>
-        {quizItem.description.map((descrLine) => (
-          <div>{descrLine}</div>
+        {quizItem.description.map((descrLine, index) => (
+          <div key={index}>{descrLine}</div>
         ))}
       </code>
     </div>

@@ -1,4 +1,4 @@
-import { Langs, IQuizItem, EMode, IAnswer } from "hooks/types";
+import { Langs, IQuizItem, EParsePartition, IAnswer } from "hooks/types";
 
 const QUESTION_PREFIX = "####";
 const ANSWER_PREFIX = "- [";
@@ -57,7 +57,7 @@ export function parseRawMDFile(lines: string): IQuizItem[] {
   const linesArr = lines.split("\n");
   const quiz: IQuizItem[] = [];
   let quizItem: IQuizItem | null = null;
-  let mode = EMode.question;
+  let mode = EParsePartition.question;
   let answer: IAnswer | null = null;
 
   linesArr.forEach((rawline, lineindex) => {
@@ -77,7 +77,7 @@ export function parseRawMDFile(lines: string): IQuizItem[] {
         answers: [],
         description: [],
       };
-      mode = EMode.question;
+      mode = EParsePartition.question;
     }
 
     if (isAnswer(line)) {
@@ -87,17 +87,17 @@ export function parseRawMDFile(lines: string): IQuizItem[] {
         description: "",
         isCorrect: isAnswerCorrect(line),
       };
-      mode = EMode.answers;
+      mode = EParsePartition.answers;
     }
 
     if (!isAnswer(line) && !isQuestions(line)) {
-      if (mode === EMode.question) quizItem?.explanation.push(line);
-      if (mode === EMode.answers && answer) answer.description += "\n" + line;
-      if (mode === EMode.answers && line === "") {
-        mode = EMode.description;
+      if (mode === EParsePartition.question) quizItem?.explanation.push(line);
+      if (mode === EParsePartition.answers && answer) answer.description += "\n" + line;
+      if (mode === EParsePartition.answers && line === "") {
+        mode = EParsePartition.description;
       }
-      if (mode === EMode.explanation) quizItem?.explanation.push(line);
-      if (mode === EMode.description) quizItem?.description.push(line);
+      if (mode === EParsePartition.explanation) quizItem?.explanation.push(line);
+      if (mode === EParsePartition.description) quizItem?.description.push(line);
     }
   });
   quizItem && quiz.push(quizItem);

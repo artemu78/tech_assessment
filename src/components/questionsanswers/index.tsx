@@ -1,5 +1,5 @@
 import { useEffect, useContext } from "react";
-import { LangContext, QuestionsContext } from "hooks/usecontext";
+import { LangContext, QuestionsContext, ResultsContext } from "hooks/usecontext";
 import { files } from "tools/const";
 import { Langs, IQuizItem } from "hooks/types";
 import { parseRawMDFile } from "tools";
@@ -26,23 +26,27 @@ const fetchQuestions = async (lang: Langs): Promise<IQuizItem[] | null> => {
 
 const Questionsanswers = (): JSX.Element => {
   const { language } = useContext(LangContext);
-  const { questions, change } = useContext(QuestionsContext);
+  const answerResults = useContext(ResultsContext);
+  const { questions, change: changeQuestions } = useContext(QuestionsContext);
 
   useEffect(() => {
     const langQuiz = questions[language];
     if (!langQuiz) {
       fetchQuestions(language).then((quiz) => {
         questions[language] = quiz || undefined;
-        change({ ...questions });
+        changeQuestions({ ...questions });
+        answerResults.init(language);
       });
     }
-  }, [language, change, questions]);
+  }, [language, changeQuestions, questions]);
 
   return (
     <div>
       {language &&
         questions[language]?.map((question, index) => {
-          return <QuizItem key={index + question.question} quizItem={question} />;
+          return (
+            <QuizItem key={index + question.question} quizItem={question} questionIndex={index} />
+          );
         })}
     </div>
   );
