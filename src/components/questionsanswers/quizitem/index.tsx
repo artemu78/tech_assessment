@@ -3,7 +3,7 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import { IQuizItem } from "hooks/types";
-
+import styles from "./styles.module.css";
 export const QuizItem = ({ quizItem }: { quizItem: IQuizItem }): JSX.Element => {
   return (
     <div>
@@ -15,7 +15,7 @@ export const QuizItem = ({ quizItem }: { quizItem: IQuizItem }): JSX.Element => 
         <ul>
           {quizItem.answers.map((answer, index) => {
             return (
-              <li key={index + answer.text}>
+              <li key={index + answer.text} className={styles.quizitem}>
                 <FormControlLabel
                   control={<Checkbox checked={answer.isCorrect || false} />}
                   label={answer.text}
