@@ -1,5 +1,6 @@
 {
   "name": "tech_assessment",
+  "homepage": "./",
   "version": "1.0.4",
   "private": true,
   "dependencies": {
