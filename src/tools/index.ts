@@ -2,6 +2,7 @@ import { Langs, IQuizItem, EParsePartition, IAnswer } from "hooks/types";
 
 const QUESTION_PREFIX = "####";
 const ANSWER_PREFIX = "- [";
+const MD_CODE_BLOCK = "```";
 
 export const getCookie = (cname: string): string => {
   let name = cname + "=";
@@ -60,11 +61,14 @@ export function parseRawMDFile(lines: string): IQuizItem[] {
   let mode = EParsePartition.question;
   let answer: IAnswer | null = null;
 
+  const isMDCodeBlock = (line: string): boolean => line.substring(0, 3) === MD_CODE_BLOCK;
+  const isQuestions = (line: string): boolean => line.substring(0, 4) === QUESTION_PREFIX;
+  const isAnswer = (line: string): boolean => line.substring(0, 3) === ANSWER_PREFIX;
+
   linesArr.forEach((rawline, lineindex) => {
-    // console.log(mode, lineindex);
     const line = rawline.trim();
-    const isQuestions = (line: string): boolean => line.substring(0, 4) === QUESTION_PREFIX;
-    const isAnswer = (line: string): boolean => line.substring(0, 3) === ANSWER_PREFIX;
+
+    if (isMDCodeBlock(line)) return;
 
     if (isQuestions(line)) {
       quizItem && answer && quizItem.answers.push({ ...answer });
@@ -93,9 +97,10 @@ export function parseRawMDFile(lines: string): IQuizItem[] {
     if (!isAnswer(line) && !isQuestions(line)) {
       if (mode === EParsePartition.question) quizItem?.explanation.push(line);
       if (mode === EParsePartition.answers && answer) answer.description += "\n" + line;
-      if (mode === EParsePartition.answers && line === "") {
-        mode = EParsePartition.description;
-      }
+      // i don't know how to different question description from last answer description (((
+      // if (mode === EParsePartition.answers && line === "") {
+      //   mode = EParsePartition.description;
+      // }
       if (mode === EParsePartition.explanation) quizItem?.explanation.push(line);
       if (mode === EParsePartition.description) quizItem?.description.push(line);
     }
