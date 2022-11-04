@@ -12,7 +12,7 @@ import styles from "./styles.module.css";
 
 const fetchQuestions = async (lang: Langs): Promise<IQuizItem[] | null> => {
   const url = files[lang].url;
-  let response;
+  let response: Response;
   try {
     response = await fetch(url);
   } catch (err) {

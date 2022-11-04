@@ -27,7 +27,7 @@ export default function VerticalLinearStepper({ questions, language }: StepsProp
       <Stepper activeStep={activeStep} orientation="vertical">
         {questions.map((step, index) => {
           const thisAnswerResult = (answersResults[language] as IQuizItemResult[])[index]?.result;
-          let icon = null;
+          let icon: JSX.Element | null = null;
           if (thisAnswerResult === EquizItemState.WRONG) icon = <DangerousIcon />;
           if (thisAnswerResult === EquizItemState.RIGHT) icon = <CheckIcon />;
 

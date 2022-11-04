@@ -42,7 +42,7 @@ export const QuizItem = ({ quizItem, questionIndex }: Props): JSX.Element => {
     };
   };
 
-  let icon;
+  let icon: JSX.Element | null = null;
   if (quizItemState === EquizItemState.NEW) icon = null;
   if (quizItemState === EquizItemState.WRONG) icon = <DangerousIcon />;
   if (quizItemState === EquizItemState.RIGHT) icon = <CheckIcon />;

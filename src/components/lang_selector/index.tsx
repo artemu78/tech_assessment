@@ -7,7 +7,7 @@ import { setCookie } from "tools";
 import { files } from "tools/const";
 import { LangContext, QuestionsContext, ResultsContext } from "context/usecontext";
 import styles from "./styles.module.css";
-import { IQuizItemResult, EquizItemState } from "context/types";
+import { IQuizItemResult, EquizItemState, Langs } from "context/types";
 
 // import SkipNextIcon from "@mui/icons-material/SkipNext";
 import CheckIcon from "@mui/icons-material/Check";
@@ -32,7 +32,7 @@ const LangSelector = () => {
   const answersResults = useContext(ResultsContext);
 
   const setLanguage = (changeEvent: SelectChangeEvent) => {
-    const langCode = (changeEvent?.target as any)?.value;
+    const langCode: Langs = changeEvent?.target?.value as Langs;
     setCookie("prog_lang", langCode);
     langCode !== language && change(langCode);
   };
