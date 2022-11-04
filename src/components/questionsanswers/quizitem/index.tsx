@@ -91,7 +91,7 @@ export const QuizItem = ({ quizItem, questionIndex }: Props): JSX.Element => {
                         disabled={!itemStateIsNew}
                       />
                     }
-                    label={answer.isCorrect.toString() + answer.text}
+                    label={answer.text}
                     disabled={!itemStateIsNew}
                   />
                   <br />
