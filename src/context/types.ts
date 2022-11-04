@@ -63,12 +63,6 @@ export interface IResultsByLang {
   [key: string]: IQuizItemResult[];
 }
 
-interface IResults2 {
-  change: (lang: string, index: number, result: IQuizItemResult) => void;
-}
-
-// export type IResults = IResultsByLang | IResults2;
-
 export interface IResults {
   [key: string]:
     | IQuizItemResult[]

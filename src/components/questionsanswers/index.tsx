@@ -43,7 +43,7 @@ const Questionsanswers = (): JSX.Element => {
         resultsInit(language);
       });
     }
-  }, [language, changeQuestions, questions]);
+  }, [language, changeQuestions, questions, resultsInit]);
 
   return (
     <div className={styles.container}>

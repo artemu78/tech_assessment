@@ -1,5 +1,5 @@
-import { useState, useContext } from "react";
-import { Checkbox, FormControlLabel, FormGroup, Icon } from "@mui/material";
+import { useContext } from "react";
+import { Checkbox, FormControlLabel, FormGroup } from "@mui/material";
 import cn from "classnames";
 import CheckIcon from "@mui/icons-material/Check";
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
@@ -8,7 +8,6 @@ import DangerousIcon from "@mui/icons-material/Dangerous";
 import { IQuizItem, IAnswer, EquizItemState, IQuizItemResult } from "context/types";
 import { ResultsContext, LangContext } from "context/usecontext";
 import styles from "./styles.module.css";
-import { style } from "@mui/system";
 
 interface Props {
   quizItem: IQuizItem;
