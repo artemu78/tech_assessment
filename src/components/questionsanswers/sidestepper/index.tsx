@@ -33,7 +33,7 @@ export default function VerticalLinearStepper({ questions, language }: StepsProp
 
           return (
             <Step
-              key={step.question}
+              key={index + step.question}
               onClick={() => setActiveStep(index)}
               sx={{ cursor: "pointer" }}
             >

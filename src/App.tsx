@@ -6,6 +6,7 @@ import Footer from "./components/Footer";
 import { QuestionsProvider, ResultsProvider } from "context/usecontext";
 
 function App() {
+  console.log(`${process.env.REACT_APP_NAME} ${process.env.REACT_APP_VERSION}`);
   return (
     <div className={styles.app}>
       <Header />

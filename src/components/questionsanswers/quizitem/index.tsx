@@ -42,7 +42,6 @@ export const QuizItem = ({ quizItem, questionIndex }: Props): JSX.Element => {
   };
 
   let icon: JSX.Element | null = null;
-  if (quizItemState === EquizItemState.NEW) icon = null;
   if (quizItemState === EquizItemState.WRONG) icon = <DangerousIcon />;
   if (quizItemState === EquizItemState.RIGHT) icon = <CheckIcon />;
   const itemStateIsNew = quizItemState === EquizItemState.NEW;
@@ -96,8 +95,8 @@ export const QuizItem = ({ quizItem, questionIndex }: Props): JSX.Element => {
                   <br />
                 </div>
                 <code className={styles.answerDescription}>
-                  {answer.description.split("\n").map((line) => (
-                    <div>{line}</div>
+                  {answer.description.split("\n").map((line, index) => (
+                    <div key={index + line}>{line}</div>
                   ))}
                 </code>
               </li>
