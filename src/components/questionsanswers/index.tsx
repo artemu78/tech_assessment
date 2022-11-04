@@ -50,7 +50,7 @@ const Questionsanswers = (): JSX.Element => {
       <StepProvider>
         <>
           <VerticalStepper questions={questions[language]} language={language} />
-          <Stepper questions={questions[language]} />
+          <Stepper questions={questions[language]} language={language} />
         </>
       </StepProvider>
     </div>

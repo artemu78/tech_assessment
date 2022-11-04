@@ -18,13 +18,13 @@ interface StepsProps {
 
 export default function VerticalLinearStepper({ questions, language }: StepsProps) {
   const answersResults = useContext(ResultsContext);
-  const { step: activeStep, change: setActiveStep } = useContext(StepContext);
+  const { step: activeStep, setStep: setActiveStep } = useContext(StepContext);
 
   if (!questions) return null;
 
   return (
     <Box sx={{ maxWidth: 400 }}>
-      <Stepper activeStep={activeStep} orientation="vertical">
+      <Stepper activeStep={activeStep[language] || 0} orientation="vertical">
         {questions.map((step, index) => {
           const thisAnswerResult = (answersResults[language] as IQuizItemResult[])[index]?.result;
           let icon: JSX.Element | null = null;
@@ -34,7 +34,7 @@ export default function VerticalLinearStepper({ questions, language }: StepsProp
           return (
             <Step
               key={index + step.question}
-              onClick={() => setActiveStep(index)}
+              onClick={() => setActiveStep(language, index)}
               sx={{ cursor: "pointer" }}
             >
               <StepLabel icon={icon}>{step.question}</StepLabel>
