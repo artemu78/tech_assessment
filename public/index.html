@@ -25,10 +25,12 @@
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-2E7SCX9Q2G"></script>
 <script>
+  if (window.location.port === 3000)
+    window['ga-disable-UA-XXXXX-Y'] = true;
+  
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-2E7SCX9Q2G');
 </script>
   </head>
