@@ -1,4 +1,4 @@
-import { Langs, IQuizItem, EParsePartition, IAnswer } from "hooks/types";
+import { Langs, IQuizItem, EParsePartition, IAnswer } from "context/types";
 
 const QUESTION_PREFIX = "####";
 const ANSWER_PREFIX = "- [";

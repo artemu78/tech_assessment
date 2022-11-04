@@ -1,9 +1,14 @@
 import { useEffect, useContext } from "react";
-import { LangContext, QuestionsContext, ResultsContext } from "hooks/usecontext";
+
+import { LangContext, QuestionsContext, ResultsContext, StepProvider } from "context/usecontext";
 import { files } from "tools/const";
-import { Langs, IQuizItem } from "hooks/types";
+import { Langs, IQuizItem } from "context/types";
 import { parseRawMDFile } from "tools";
-import { QuizItem } from "./quizitem";
+
+import VerticalStepper from "./sidestepper";
+import Stepper from "./stepper";
+
+import styles from "./styles.module.css";
 
 const fetchQuestions = async (lang: Langs): Promise<IQuizItem[] | null> => {
   const url = files[lang].url;
@@ -26,7 +31,7 @@ const fetchQuestions = async (lang: Langs): Promise<IQuizItem[] | null> => {
 
 const Questionsanswers = (): JSX.Element => {
   const { language } = useContext(LangContext);
-  const answerResults = useContext(ResultsContext);
+  const { init: resultsInit } = useContext(ResultsContext);
   const { questions, change: changeQuestions } = useContext(QuestionsContext);
 
   useEffect(() => {
@@ -35,19 +40,19 @@ const Questionsanswers = (): JSX.Element => {
       fetchQuestions(language).then((quiz) => {
         questions[language] = quiz || undefined;
         changeQuestions({ ...questions });
-        answerResults.init(language);
+        resultsInit(language);
       });
     }
   }, [language, changeQuestions, questions]);
 
   return (
-    <div>
-      {language &&
-        questions[language]?.map((question, index) => {
-          return (
-            <QuizItem key={index + question.question} quizItem={question} questionIndex={index} />
-          );
-        })}
+    <div className={styles.container}>
+      <StepProvider>
+        <>
+          <VerticalStepper questions={questions[language]} language={language} />
+          <Stepper questions={questions[language]} />
+        </>
+      </StepProvider>
     </div>
   );
 };

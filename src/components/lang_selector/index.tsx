@@ -5,11 +5,11 @@ import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { setCookie } from "tools";
 import { files } from "tools/const";
-import { LangContext, QuestionsContext, ResultsContext } from "hooks/usecontext";
+import { LangContext, QuestionsContext, ResultsContext } from "context/usecontext";
 import styles from "./styles.module.css";
-import { IQuizItemResult, EquizItemState } from "hooks/types";
+import { IQuizItemResult, EquizItemState } from "context/types";
 
-import SkipNextIcon from "@mui/icons-material/SkipNext";
+// import SkipNextIcon from "@mui/icons-material/SkipNext";
 import CheckIcon from "@mui/icons-material/Check";
 import DangerousIcon from "@mui/icons-material/Dangerous";
 
@@ -77,10 +77,10 @@ const LangSelector = () => {
           <DangerousIcon />
           &nbsp;{calculatedResults.wrong}
         </div>
-        <div title="skipped">
+        {/* <div title="skipped">
           <SkipNextIcon />
           &nbsp;{calculatedResults.skipped}
-        </div>
+        </div> */}
       </div>
       <div> of {questions[language]?.length} total questions</div>
     </div>

@@ -5,8 +5,8 @@ import CheckIcon from "@mui/icons-material/Check";
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
 import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
 import DangerousIcon from "@mui/icons-material/Dangerous";
-import { IQuizItem, IAnswer, EquizItemState, IQuizItemResult } from "hooks/types";
-import { ResultsContext, LangContext } from "hooks/usecontext";
+import { IQuizItem, IAnswer, EquizItemState, IQuizItemResult } from "context/types";
+import { ResultsContext, LangContext } from "context/usecontext";
 import styles from "./styles.module.css";
 import { style } from "@mui/system";
 
