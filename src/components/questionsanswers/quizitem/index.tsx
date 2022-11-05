@@ -12,18 +12,17 @@ import styles from "./styles.module.css";
 interface Props {
   quizItem: IQuizItem;
   questionIndex: number;
+  nextButtonRef: HTMLButtonElement | null;
 }
 
-export const QuizItem = ({ quizItem, questionIndex }: Props): JSX.Element => {
+export const QuizItem = ({ quizItem, questionIndex, nextButtonRef }: Props): JSX.Element => {
   const answersResults = useContext(ResultsContext);
   const { language } = useContext(LangContext);
-  // const [quizItemState, setQuizItemState] = useState<EquizItemState>(EquizItemState.NEW);
 
   let quizItemState = EquizItemState.NEW;
   let userAnswerIndex: null | number = null;
   const thisAnswerResult = (answersResults[language] as IQuizItemResult[])[questionIndex];
   if (thisAnswerResult) {
-    // setQuizItemState(thisAnswerResult.result);
     quizItemState = thisAnswerResult.result;
     userAnswerIndex = thisAnswerResult.answer;
   }
@@ -31,8 +30,7 @@ export const QuizItem = ({ quizItem, questionIndex }: Props): JSX.Element => {
   const onChange = (answerItem: IAnswer, index: number) => {
     return () => {
       if (quizItemState !== EquizItemState.NEW) return;
-      // if (answerItem.isCorrect) setQuizItemState(EquizItemState.RIGHT);
-      // else setQuizItemState(EquizItemState.WRONG);
+      nextButtonRef?.focus();
       const answerResult: IQuizItemResult = {
         result: answerItem.isCorrect ? EquizItemState.RIGHT : EquizItemState.WRONG,
         answer: index,

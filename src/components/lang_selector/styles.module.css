@@ -5,6 +5,8 @@
   top: 0;
   background-color: antiquewhite;
   z-index: 1;
+  padding: 10px 0;
+  border-bottom: 1px solid lightgrey;
 }
 
 .container > div {

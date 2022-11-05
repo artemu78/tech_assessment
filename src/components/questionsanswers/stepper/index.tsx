@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useRef, useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
 import MobileStepper from "@mui/material/MobileStepper";
@@ -16,8 +16,15 @@ interface StepsProps {
 
 export default function Stepper({ questions, language }: StepsProps) {
   const theme = useTheme();
+  const nextButton = useRef<HTMLButtonElement | null>(null);
   const { step: activeStep, setStep: setActiveStep } = useContext(StepContext);
+  // const [thisLanguageActiveStep, setActiveStepIndex] = useState<number>(activeStep[language] || 0);
+  const thisLanguageActiveStep = activeStep[language] || 0;
   const maxSteps = questions?.length || 0;
+
+  useEffect(() => {
+    nextButton?.current?.blur();
+  }, [thisLanguageActiveStep]);
 
   const handleNext = () => {
     setActiveStep(language, thisLanguageActiveStep + 1);
@@ -29,7 +36,6 @@ export default function Stepper({ questions, language }: StepsProps) {
 
   if (!questions) return null;
 
-  const thisLanguageActiveStep = activeStep[language] || 0;
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Box sx={{ width: "100%" }}>
@@ -37,6 +43,7 @@ export default function Stepper({ questions, language }: StepsProps) {
           key={activeStep + questions[thisLanguageActiveStep].question}
           quizItem={questions[thisLanguageActiveStep]}
           questionIndex={thisLanguageActiveStep}
+          nextButtonRef={nextButton?.current}
         />
       </Box>
       <MobileStepper
@@ -49,6 +56,10 @@ export default function Stepper({ questions, language }: StepsProps) {
             size="small"
             onClick={handleNext}
             disabled={thisLanguageActiveStep === maxSteps - 1}
+            ref={nextButton}
+            onFocus={(e): void => {
+              e.target.classList.add("Mui-focusVisible");
+            }}
           >
             Next
             {theme.direction === "rtl" ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
