@@ -77,9 +77,9 @@ export function parseRawMDFile(lines: string): IQuizItem[] {
 
       quizItem = {
         question: parseQuestionLine(line.substring(5)),
-        explanation: [],
+        explanation: "",
         answers: [],
-        description: [],
+        description: "",
       };
       mode = EParsePartition.question;
     }
@@ -95,14 +95,14 @@ export function parseRawMDFile(lines: string): IQuizItem[] {
     }
 
     if (!isAnswer(line) && !isQuestions(line)) {
-      if (mode === EParsePartition.question) quizItem?.explanation.push(line);
-      if (mode === EParsePartition.answers && answer) answer.description += "\n" + line;
+      if (quizItem && mode === EParsePartition.question) quizItem.explanation += "\n" + line;
+      if (mode === EParsePartition.answers && answer) answer.description += line;
       // i don't know how to different question description from last answer description (((
       // if (mode === EParsePartition.answers && line === "") {
       //   mode = EParsePartition.description;
       // }
-      if (mode === EParsePartition.explanation) quizItem?.explanation.push(line);
-      if (mode === EParsePartition.description) quizItem?.description.push(line);
+      if (quizItem && mode === EParsePartition.explanation) quizItem.explanation += "\n" + line;
+      if (quizItem && mode === EParsePartition.description) quizItem.description += "\n" + line;
     }
   });
   quizItem && quiz.push(quizItem);

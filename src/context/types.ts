@@ -42,10 +42,10 @@ export interface IQuestionsContestProps {
 }
 
 export interface IQuizItem {
-  question: string;
-  description: string[];
+  question: string; // question header, i.e. question itself
+  description: string; // between question and answers, some question details
   answers: IAnswer[];
-  explanation: string[];
+  explanation: string; // block below answers, some tutoring link
 }
 
 export interface IAnswer {
