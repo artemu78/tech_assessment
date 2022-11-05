@@ -67,22 +67,24 @@ const LangSelector = () => {
           {menuItems}
         </Select>
       </FormControl>
-      <div>answers</div>
-      <div className={styles.results}>
-        <div title="correct">
-          <CheckIcon />
-          &nbsp;{calculatedResults.right}
-        </div>
-        <div title="wrong">
-          <DangerousIcon />
-          &nbsp;{calculatedResults.wrong}
-        </div>
-        {/* <div title="skipped">
+      <div className={styles.answers}>
+        <div>answers</div>
+        <div className={styles.results}>
+          <div title="correct">
+            <CheckIcon />
+            &nbsp;{calculatedResults.right}
+          </div>
+          <div title="wrong">
+            <DangerousIcon />
+            &nbsp;{calculatedResults.wrong}
+          </div>
+          {/* <div title="skipped">
           <SkipNextIcon />
           &nbsp;{calculatedResults.skipped}
         </div> */}
+        </div>
+        <div> of {questions[language]?.length} total questions</div>
       </div>
-      <div> of {questions[language]?.length} total questions</div>
     </div>
   );
 };
