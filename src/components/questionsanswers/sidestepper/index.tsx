@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useRef } from "react";
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
@@ -18,13 +18,20 @@ interface StepsProps {
 
 export default function VerticalLinearStepper({ questions, language }: StepsProps) {
   const answersResults = useContext(ResultsContext);
+  const stepRefs = useRef<HTMLDivElement[]>([]);
   const { step: activeStep, setStep: setActiveStep } = useContext(StepContext);
+  const activeStepIndex = activeStep[language] || 0;
+  useEffect(() => {
+    const el = stepRefs.current[activeStepIndex];
+    if (!el || window.innerWidth < 500) return;
+    const y = el.getBoundingClientRect().top + window.pageYOffset - 80;
+    window.scrollTo({ top: y, behavior: "smooth" });
+  }, [activeStepIndex]);
 
   if (!questions) return null;
-
   return (
     <Box sx={{ maxWidth: 400 }}>
-      <Stepper activeStep={activeStep[language] || 0} orientation="vertical">
+      <Stepper activeStep={activeStepIndex} orientation="vertical">
         {questions.map((step, index) => {
           const thisAnswerResult = (answersResults[language] as IQuizItemResult[])[index]?.result;
           let icon: JSX.Element | null = null;
@@ -36,6 +43,9 @@ export default function VerticalLinearStepper({ questions, language }: StepsProp
               key={index + step.question}
               onClick={() => setActiveStep(language, index)}
               sx={{ cursor: "pointer" }}
+              ref={(elem) => {
+                elem && (stepRefs.current[index] = elem);
+              }}
             >
               <StepLabel icon={icon}>{step.question}</StepLabel>
               <StepContent>

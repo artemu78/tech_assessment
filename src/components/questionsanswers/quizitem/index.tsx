@@ -61,9 +61,6 @@ export const QuizItem = ({ quizItem, questionIndex, nextButtonRef }: Props): JSX
   const explanation = md.render(quizItem.explanation).replace(srcRegex, `src=$1${basePath}/$2$3`);
   const description = md.render(quizItem.description).replace(srcRegex, `src=$1${basePath}/$2$3`);
 
-  console.log(quizItem.explanation);
-  console.log(explanation);
-
   return (
     <div>
       <h2 className={titleClassName}>
