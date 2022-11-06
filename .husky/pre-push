@@ -3,3 +3,4 @@
 
 npm version patch
 npm run ts-coverage
+npm run build
