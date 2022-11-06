@@ -4,3 +4,4 @@
 npm version patch
 npm run ts-coverage
 npm run build
+git push --tags --no-verify
