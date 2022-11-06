@@ -1,4 +1,12 @@
-export const files = {
+export type IQuizMetadataItem = {
+  code: string;
+  url: string;
+  name: string;
+};
+
+export type IQuizCode = keyof typeof quizMetaData;
+
+export const quizMetaData = {
   css: {
     code: "css",
     url: "https://raw.githubusercontent.com/Ebazhanov/linkedin-skill-assessments-quizzes/main/css/css-quiz.md",

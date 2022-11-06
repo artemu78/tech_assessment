@@ -1,8 +1,8 @@
 import { useEffect, useContext } from "react";
 
 import { LangContext, QuestionsContext, ResultsContext, StepProvider } from "context/usecontext";
-import { files } from "tools/const";
-import { Langs, IQuizItem } from "context/types";
+import { quizMetaData, IQuizCode } from "tools/const";
+import { IQuizItem } from "context/types";
 import { parseRawMDFile } from "tools";
 
 import VerticalStepper from "./sidestepper";
@@ -10,8 +10,8 @@ import Stepper from "./stepper";
 
 import styles from "./styles.module.css";
 
-const fetchQuestions = async (lang: Langs): Promise<IQuizItem[] | null> => {
-  const url = files[lang].url;
+const fetchQuestions = async (lang: IQuizCode): Promise<IQuizItem[] | null> => {
+  const url = quizMetaData[lang].url;
   let response: Response;
   try {
     response = await fetch(url);

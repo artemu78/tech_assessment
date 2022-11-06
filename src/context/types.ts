@@ -1,10 +1,4 @@
-export enum Langs {
-  REACT = "react",
-  CSS = "css",
-  HTML = "html",
-  JAVASCRIPT = "javascript",
-  FRONTEND = "frontend",
-}
+import { IQuizCode } from "tools/const";
 
 export interface IContestProps {
   change: (theme: string) => void;
@@ -12,8 +6,8 @@ export interface IContestProps {
 }
 
 export interface ILangContext {
-  language: Langs;
-  change: (lang: Langs) => void;
+  language: IQuizCode;
+  change: (lang: IQuizCode) => void;
 }
 
 export interface IProps {
@@ -34,7 +28,7 @@ export enum EquizItemState {
   SKIPPED,
 }
 
-export type IQuestions = Partial<Record<Langs, IQuizItem[]>>;
+export type IQuestions = Partial<Record<IQuizCode, IQuizItem[]>>;
 
 export interface IQuestionsContestProps {
   change: (questions: IQuestions) => void;

@@ -1,15 +1,14 @@
 import { useContext, useMemo } from "react";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
+
 import { setCookie } from "tools";
-import { files } from "tools/const";
+import { quizMetaData, IQuizMetadataItem, IQuizCode } from "tools/const";
 import { LangContext, QuestionsContext, ResultsContext } from "context/usecontext";
 import styles from "./styles.module.css";
-import { IQuizItemResult, EquizItemState, Langs } from "context/types";
+import { IQuizItemResult, EquizItemState } from "context/types";
 
-// import SkipNextIcon from "@mui/icons-material/SkipNext";
 import CheckIcon from "@mui/icons-material/Check";
 import DangerousIcon from "@mui/icons-material/Dangerous";
 
@@ -26,26 +25,23 @@ const calcResult = (results: IQuizItemResult[]): ICalcResult => {
   return { right, wrong, skipped };
 };
 
-const LangSelector = () => {
+const IQuizCodeelector = () => {
   const { language, change } = useContext(LangContext);
   const { questions } = useContext(QuestionsContext);
   const answersResults = useContext(ResultsContext);
-
-  const setLanguage = (changeEvent: SelectChangeEvent) => {
-    const langCode: Langs = changeEvent?.target?.value as Langs;
-    setCookie("prog_lang", langCode);
-    langCode !== language && change(langCode);
-  };
 
   const calculatedResults = useMemo(
     () => calcResult(answersResults[language] as IQuizItemResult[]),
     [language, answersResults]
   );
 
-  const menuItems = [];
+  const flattenedQuizMetaData: IQuizMetadataItem[] = [];
 
-  for (let code in files) {
-    const name = files[code as keyof typeof files].name;
+  const menuItems: JSX.Element[] = [];
+  for (let code in quizMetaData) {
+    const quizDefItem = quizMetaData[code as keyof typeof quizMetaData];
+    const name = quizDefItem.name;
+    flattenedQuizMetaData.push(quizDefItem);
     menuItems.push(
       <MenuItem value={code} key={code}>
         {name || "no name"}
@@ -53,20 +49,24 @@ const LangSelector = () => {
     );
   }
 
+  const setLanguage = (changeEvent: React.SyntheticEvent, value: IQuizMetadataItem | null) => {
+    const langCode = (value?.code || "") as IQuizCode;
+    setCookie("prog_lang", langCode);
+    langCode !== language && change(langCode);
+  };
+
   return (
     <div className={styles.container}>
-      <FormControl sx={{ minWidth: 120, width: 300 }}>
-        <InputLabel id="demo-simple-select-label">Choose assessment</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          label="Choose assessment language"
-          onChange={setLanguage}
-          value={language || undefined}
-        >
-          {menuItems}
-        </Select>
-      </FormControl>
+      <Autocomplete
+        disablePortal
+        id="combo-box-demo"
+        options={flattenedQuizMetaData}
+        sx={{ width: 300 }}
+        renderInput={(params) => <TextField {...params} label="Choose assessment language" />}
+        getOptionLabel={(option) => option.name}
+        onChange={setLanguage}
+        value={quizMetaData[language]}
+      />
       <div className={styles.answers}>
         <div>answers</div>
         <div className={styles.results}>
@@ -89,4 +89,4 @@ const LangSelector = () => {
   );
 };
 
-export default LangSelector;
+export default IQuizCodeelector;

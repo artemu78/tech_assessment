@@ -1,4 +1,5 @@
-import { Langs, IQuizItem, EParsePartition, IAnswer } from "context/types";
+import { IQuizItem, EParsePartition, IAnswer } from "context/types";
+import { IQuizCode } from "tools/const";
 
 const QUESTION_PREFIX = "####";
 const ANSWER_PREFIX = "- [";
@@ -20,7 +21,7 @@ export const getCookie = (cname: string): string => {
   return "";
 };
 
-export function setCookie(cname: string, cvalue: Langs, exdays: number | null = null): void {
+export function setCookie(cname: string, cvalue: IQuizCode, exdays: number | null = null): void {
   let expires = "";
   if (exdays) {
     const d = new Date();

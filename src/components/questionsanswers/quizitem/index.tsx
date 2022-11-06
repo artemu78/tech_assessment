@@ -7,7 +7,7 @@ import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDiss
 import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
 import DangerousIcon from "@mui/icons-material/Dangerous";
 import { IQuizItem, IAnswer, EquizItemState, IQuizItemResult } from "context/types";
-import { files } from "tools/const";
+import { quizMetaData } from "tools/const";
 import { ResultsContext, LangContext } from "context/usecontext";
 import styles from "./styles.module.css";
 
@@ -28,7 +28,7 @@ export const QuizItem = ({ quizItem, questionIndex, nextButtonRef }: Props): JSX
     quizItemState = thisAnswerResult.result;
     userAnswerIndex = thisAnswerResult.answer;
   }
-  const mdFileUrl = files[language].url;
+  const mdFileUrl = quizMetaData[language].url;
   const basePath = mdFileUrl
     .split("/")
     .slice(0, mdFileUrl.split("/").length - 1)
