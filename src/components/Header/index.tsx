@@ -1,23 +1,31 @@
 import { useState } from "react";
-import Badge, { BadgeProps } from "@mui/material/Badge";
+import IconButton from "@mui/material/IconButton";
 import Dialog from "@mui/material/Dialog";
-import { styled } from "@mui/material/styles";
-import InfoIcon from "@mui/icons-material/Info";
+import MenuIcon from "@mui/icons-material/Menu";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+
 import styles from "./styles.module.css";
 
-const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
-  "& .MuiBadge-badge": {
-    right: -10,
-    top: 13,
-    backgroundColor: "transparent",
-  },
-}));
-
 const Header = (): JSX.Element => {
-  const [isOpen, setOpen] = useState(false);
+  const [isModalOpen, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const open = Boolean(anchorEl);
 
   const handleClick = () => {
-    setOpen((st) => !st);
+    setOpen(false);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const aboutItemClick = () => {
+    setOpen(true);
+    setAnchorEl(null);
   };
 
   return (
@@ -26,15 +34,25 @@ const Header = (): JSX.Element => {
         <div className={styles.praporBlue} />
         <div className={styles.praporYellow} />
       </a>
-      <StyledBadge
-        badgeContent={<InfoIcon htmlColor="#404040" />}
-        color="primary"
-        onClick={handleClick}
-      >
+
+      <div className={styles.titleLine}>
+        <IconButton
+          size="large"
+          edge="start"
+          color="inherit"
+          aria-label="menu"
+          sx={{ mr: 2, p: 2 }}
+          aria-controls={open ? "basic-menu" : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? "true" : undefined}
+          onClick={handleMenuClick}
+        >
+          <MenuIcon />
+        </IconButton>
         <h1>Technical Assessment</h1>
-      </StyledBadge>
-      <Dialog onClose={handleClick} open={isOpen}>
-        <div>
+      </div>
+      <Dialog onClose={handleClick} open={isModalOpen}>
+        <div className={styles.info}>
           This is open source technical questions assessment.
           <br />
           <br />
@@ -63,6 +81,17 @@ const Header = (): JSX.Element => {
           </a>
         </div>
       </Dialog>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          "aria-labelledby": "basic-button",
+        }}
+      >
+        <MenuItem onClick={aboutItemClick}>About</MenuItem>
+      </Menu>
     </header>
   );
 };

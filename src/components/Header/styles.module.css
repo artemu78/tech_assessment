@@ -7,3 +7,18 @@
   background-color: #ffcc00;
   height: 10px;
 }
+
+.info {
+  padding: 20px;
+}
+
+.titleLine {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.titleLine > h1 {
+  flex-grow: 1;
+}

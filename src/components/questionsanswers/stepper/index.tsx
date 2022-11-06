@@ -41,43 +41,54 @@ export default function Stepper({ questions, language }: StepsProps) {
     <Box sx={{ flexGrow: 1 }}>
       <div className={styles.fixedQuizItem}>
         <Box sx={{ width: "100%" }}>
+          <MobileStepper
+            variant="progress"
+            steps={maxSteps}
+            position="static"
+            activeStep={thisLanguageActiveStep}
+            sx={{
+              bgcolor: "transparent",
+            }}
+            backButton={null}
+            nextButton={null}
+          />
           <QuizItem
             key={activeStep + questions[thisLanguageActiveStep].question}
             quizItem={questions[thisLanguageActiveStep]}
             questionIndex={thisLanguageActiveStep}
             nextButtonRef={nextButton?.current}
           />
+          <MobileStepper
+            variant="text"
+            steps={maxSteps}
+            position="static"
+            activeStep={thisLanguageActiveStep}
+            sx={{
+              bgcolor: "transparent",
+              border: "1px solid lightgrey",
+            }}
+            nextButton={
+              <Button
+                size="small"
+                onClick={handleNext}
+                disabled={thisLanguageActiveStep === maxSteps - 1}
+                ref={nextButton}
+                onFocus={(e): void => {
+                  e.target.classList.add("Mui-focusVisible");
+                }}
+              >
+                Next
+                {theme.direction === "rtl" ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+              </Button>
+            }
+            backButton={
+              <Button size="small" onClick={handleBack} disabled={thisLanguageActiveStep === 0}>
+                {theme.direction === "rtl" ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+                Back
+              </Button>
+            }
+          />
         </Box>
-        <MobileStepper
-          variant="text"
-          steps={maxSteps}
-          position="static"
-          activeStep={thisLanguageActiveStep}
-          sx={{
-            bgcolor: "transparent",
-            border: "1px solid lightgrey",
-          }}
-          nextButton={
-            <Button
-              size="small"
-              onClick={handleNext}
-              disabled={thisLanguageActiveStep === maxSteps - 1}
-              ref={nextButton}
-              onFocus={(e): void => {
-                e.target.classList.add("Mui-focusVisible");
-              }}
-            >
-              Next
-              {theme.direction === "rtl" ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
-            </Button>
-          }
-          backButton={
-            <Button size="small" onClick={handleBack} disabled={thisLanguageActiveStep === 0}>
-              {theme.direction === "rtl" ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
-              Back
-            </Button>
-          }
-        />
       </div>
     </Box>
   );
