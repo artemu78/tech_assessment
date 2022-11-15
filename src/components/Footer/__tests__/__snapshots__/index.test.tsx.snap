@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`render Footer 1`] = `
+<div>
+  <footer
+    style="background-color: lightgrey;"
+  >
+    <span>
+      <a
+        href="https://github.com/Ebazhanov/linkedin-skill-assessments-quizzes"
+      >
+        questions source
+      </a>
+      , 
+    </span>
+    <span>
+      <a
+        href="https://github.com/artemu78/tech_assessment"
+      >
+        this app source repository
+      </a>
+      , 
+    </span>
+    <span>
+      <a
+        href="https://artemu78.github.io/tech_assessment/coverage-ts/"
+      >
+        this app typescript coverage
+      </a>
+      , 
+    </span>
+    <span>
+      <a
+        href="https://artemu78.github.io/tech_assessment/coverage/"
+      >
+        this app test coverage
+      </a>
+      , 
+    </span>
+    <span>
+      <a
+        href="https://t.me/artemu78"
+      >
+        hire/contact me
+      </a>
+    </span>
+  </footer>
+</div>
+`;

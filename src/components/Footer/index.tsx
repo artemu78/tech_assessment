@@ -3,6 +3,7 @@ export const links: [string, string][] = [
   ["questions source", "https://github.com/Ebazhanov/linkedin-skill-assessments-quizzes"],
   ["this app source repository", "https://github.com/artemu78/tech_assessment"],
   ["this app typescript coverage", "https://artemu78.github.io/tech_assessment/coverage-ts/"],
+  ["this app test coverage", "https://artemu78.github.io/tech_assessment/coverage/"],
   ["hire/contact me", "https://t.me/artemu78"],
 ];
 

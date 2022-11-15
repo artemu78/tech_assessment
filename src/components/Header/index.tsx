@@ -1,33 +1,41 @@
 import { useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
 import MenuIcon from "@mui/icons-material/Menu";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-
+import Button from "@mui/material/Button";
 import styles from "./styles.module.css";
 
 const Header = (): JSX.Element => {
-  const [isModalOpen, setOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [anchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
+
   const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
+    console.log("burger menu click");
+    setMenuAnchorEl(event.currentTarget);
   };
 
   const open = Boolean(anchorEl);
 
-  const handleClick = () => {
-    setOpen(false);
+  const handleDialogClose = () => {
+    console.log("close dialog");
+    setModalOpen(false);
   };
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleMenuClose = () => {
+    console.log("close burger menu");
+    setMenuAnchorEl(null);
   };
 
   const aboutItemClick = () => {
-    setOpen(true);
-    setAnchorEl(null);
+    console.log("open dialog");
+    setModalOpen(true);
+    setMenuAnchorEl(null);
   };
 
+  console.log({ open, isModalOpen });
   return (
     <header>
       <a href="https://war.ukraine.ua/support-ukraine/" target="_blank" rel="noreferrer">
@@ -46,13 +54,21 @@ const Header = (): JSX.Element => {
           aria-haspopup="true"
           aria-expanded={open ? "true" : undefined}
           onClick={handleMenuClick}
+          data-testid="header_menuButton"
         >
           <MenuIcon />
         </IconButton>
         <h1>Technical Assessment</h1>
       </div>
-      <Dialog onClose={handleClick} open={isModalOpen}>
-        <div className={styles.info}>
+      <Dialog
+        onClose={() => {
+          console.log("try to close dialog");
+          handleDialogClose();
+        }}
+        open={isModalOpen}
+        data-testid="header_aboutDialog"
+      >
+        <DialogContent>
           This is open source technical questions assessment.
           <br />
           <br />
@@ -79,18 +95,25 @@ const Header = (): JSX.Element => {
           >
             contribute
           </a>
-        </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose} data-testid="header-closeButton">
+            Close
+          </Button>
+        </DialogActions>
       </Dialog>
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}
         open={open}
-        onClose={handleClose}
+        onClose={handleMenuClose}
         MenuListProps={{
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem onClick={aboutItemClick}>About</MenuItem>
+        <MenuItem onClick={aboutItemClick} data-testid="header_aboutItem">
+          About
+        </MenuItem>
       </Menu>
     </header>
   );

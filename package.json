@@ -23,9 +23,11 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test-coverage": "react-scripts test --coverage",
     "eject": "react-scripts eject",
     "ts-coverage": "typescript-coverage-report",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache"
   },
   "eslintConfig": {
     "extends": [
