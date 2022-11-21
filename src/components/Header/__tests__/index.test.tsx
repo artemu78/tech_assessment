@@ -1,4 +1,3 @@
-import React from "react";
 import {
   render,
   screen,
@@ -7,105 +6,85 @@ import {
   waitForElementToBeRemoved,
 } from "@testing-library/react";
 const { default: userEvent } = require("@testing-library/user-event");
-import Dialog from "@mui/material/Dialog";
 import Header from "..";
 
-// jest.mock("../foo-bar-baz", () => {
-//   const originalModule = jest.requireActual("../foo-bar-baz");
-//   return {
-//     __esModule: true,
-//     ...originalModule,
-//     onClose: jest.fn(() => console.log()),
-//   };
-// });
-
 describe("Header", () => {
-  test("render snapshot", () => {
+  test("Render snapshot", () => {
     const { container } = render(<Header />);
     expect(container).toMatchSnapshot();
   });
-  test("hide and show dialog", async () => {
-    // const customSetState = (initial) => [initial, (val) => {}];
 
-    // const setModalOpen = jest.fn();
-    // const setMenuAnchorEl = jest.fn();
-
-    // const setModalOpen = jest.fn().mockReturnValueOnce(false);
-
-    // const setstate = <T,>(init: T) => {
-    //   const hook = { val: init };
-    //   return [hook.val, (newval: any) => (hook.val = newval)];
-    // };
-
-    // React.useState = jest
-    //   .fn()
-    //   .mockReturnValueOnce(setstate(false))
-    //   .mockReturnValueOnce(setstate(null));
-
-    const { container, getByTestId } = render(<Header />);
+  test("Check link", () => {
+    render(<Header />);
     expect(screen.getByRole("link")).toHaveAttribute(
       "href",
       "https://war.ukraine.ua/support-ukraine/"
     );
-    expect(screen.queryByTestId("header_menuButton")).toBeInTheDocument();
-    expect(screen.queryByTestId("header_aboutItem")).not.toBeInTheDocument();
+  });
 
-    fireEvent.click(getByTestId("header_menuButton")); // 1st click on burger button on the left
-    expect(screen.queryByTestId("header_aboutItem")).toBeInTheDocument();
-    await waitFor(() => screen.getByTestId("header_menuButton"));
-    await waitFor(() => screen.getByTestId("header_aboutItem"));
-    expect(screen.queryByTestId("header_aboutDialog")).not.toBeInTheDocument();
-    expect(screen.queryByTestId("header_aboutItem")).toBeVisible();
+  test("Open & close menu", async () => {
+    render(<Header />);
+    const burgerButton = screen.getByRole("button", { name: "menu" });
 
-    console.log("before 2nd click", new Date().toISOString());
-    await userEvent.click(getByTestId("header_menuButton"), { delay: 1000 }); // 2nd click on burger button on the left
-    console.log("after 2nd click", new Date().toISOString());
+    expect(burgerButton).toBeInTheDocument();
+    fireEvent.click(burgerButton); // click on burger button on the left
 
-    expect(screen.queryByTestId("header_aboutItem")).toBeInTheDocument();
-    expect(screen.queryByTestId("header_aboutItem")).toBeVisible();
+    expect(screen.queryByRole("menuitem", { name: "About" })).toBeInTheDocument();
 
-    await waitFor(() => screen.getByTestId("header_menuButton"));
-    await waitFor(() => screen.getByTestId("header_aboutItem"));
-    expect(screen.queryByTestId("header_aboutDialog")).not.toBeInTheDocument();
+    const firstChild = screen.getByRole("presentation").firstChild; // material ui clickable layer to hide menu
+    expect(firstChild).toBeInTheDocument();
+    firstChild && fireEvent.click(firstChild);
 
-    fireEvent.click(getByTestId("header_aboutItem")); // click on "About" menu item
-    await waitFor(() => screen.getByTestId("header_aboutDialog")); // wait until dialog appear
-    expect(screen.queryByTestId("header_aboutDialog")).toBeInTheDocument();
+    await waitFor(() => expect(screen.queryByRole("menuitem", { name: "About" })).toBeNull());
+    expect(screen.queryByRole("menuitem", { name: "About" })).not.toBeInTheDocument();
+  });
 
-    expect(
-      screen
-        .getAllByRole("link")
-        .find(
-          (el) =>
-            (el as HTMLLinkElement).href ===
-            "https://docs.github.com/en/get-started/exploring-projects-on-github/finding-ways-to-contribute-to-open-source-on-github"
-        )
-    ).toBeInTheDocument();
-    expect(
-      screen
-        .getAllByRole("link")
-        .find(
-          (el) =>
-            (el as HTMLLinkElement).href ===
-            "https://github.com/ebazhanov/linkedin-skill-assessments-quizzes/"
-        )
-    ).toBeInTheDocument();
+  test("open & close dialog by close button", async () => {
+    render(<Header />);
+    fireEvent.click(screen.getByRole("button", { name: "menu" })); // click on burger button on the left
 
-    // fireEvent.click(getByTestId("header_menuButton")); // click on burger button on the left
-    // // fireEvent.click(document.body);
+    const aboutItem = screen.getByRole("menuitem", { name: "About" });
+    expect(aboutItem).toBeInTheDocument();
 
-    // await fireEvent.keyDown(document.body, {
-    //   key: "Escape",
-    //   keyCode: 27,
-    //   which: 27,
-    //   delay: 1000,
-    // });
+    await userEvent.click(aboutItem);
 
-    // await userEvent.click(document.body, { delay: 1000 });
-    // await userEvent.click(getByTestId("header-closeButton"), { delay: 1000 });
+    const aboutItemHidden = screen.queryByRole("menuitem", { name: "About" });
+    expect(aboutItemHidden).not.toBeInTheDocument();
 
-    // // expect(screen.queryByTestId("header_aboutDialog")).not.toBeInTheDocument();
-    // expect(screen.queryByTestId("header_aboutDialog")).not.toContainElement(null);
-    // // expect(setModalOpen).toHaveBeenLastCalledWith(false);
+    const dialog = screen.queryByRole("dialog");
+    expect(dialog).toBeInTheDocument();
+
+    const closeButton = screen.queryByRole("button", { name: "Close" });
+    await userEvent.click(closeButton);
+
+    await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+
+    const dialogHidden = screen.queryByRole("dialog");
+    expect(dialogHidden).not.toBeInTheDocument();
+  });
+
+  test("open & close dialog by outside click", async () => {
+    render(<Header />);
+    fireEvent.click(screen.getByRole("button", { name: "menu" })); // click on burger button on the left
+
+    const aboutItem = screen.getByRole("menuitem", { name: "About" });
+    expect(aboutItem).toBeInTheDocument();
+
+    await userEvent.click(aboutItem);
+
+    const aboutItemHidden = screen.queryByRole("menuitem", { name: "About" });
+    expect(aboutItemHidden).not.toBeInTheDocument();
+
+    const dialog = screen.queryByRole("dialog");
+    expect(dialog).toBeInTheDocument();
+
+    const firstChild = screen.getAllByRole("presentation")[0].firstChild; // material ui clickable layer to hide menu
+    expect(firstChild).toBeInTheDocument();
+    firstChild && fireEvent.click(firstChild);
+
+    await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+
+    const dialogHidden = screen.queryByRole("dialog");
+    expect(dialogHidden).not.toBeInTheDocument();
   });
 });

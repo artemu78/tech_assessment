@@ -14,28 +14,23 @@ const Header = (): JSX.Element => {
   const [anchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    console.log("burger menu click");
     setMenuAnchorEl(event.currentTarget);
   };
 
   const open = Boolean(anchorEl);
 
   const handleDialogClose = () => {
-    console.log("close dialog");
     setModalOpen(false);
   };
   const handleMenuClose = () => {
-    console.log("close burger menu");
     setMenuAnchorEl(null);
   };
 
   const aboutItemClick = () => {
-    console.log("open dialog");
     setModalOpen(true);
     setMenuAnchorEl(null);
   };
 
-  console.log({ open, isModalOpen });
   return (
     <header>
       <a href="https://war.ukraine.ua/support-ukraine/" target="_blank" rel="noreferrer">
@@ -62,7 +57,6 @@ const Header = (): JSX.Element => {
       </div>
       <Dialog
         onClose={() => {
-          console.log("try to close dialog");
           handleDialogClose();
         }}
         open={isModalOpen}
