@@ -29,12 +29,6 @@
     "prepare": "husky install",
     "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -49,6 +43,8 @@
   },
   "devDependencies": {
     "@types/remarkable": "^2.0.3",
+    "eslint-plugin-jest-dom": "^4.0.3",
+    "eslint-plugin-testing-library": "^5.9.1",
     "husky": "^8.0.1",
     "prettier": "2.7.1",
     "typescript-coverage-report": "^0.6.4"

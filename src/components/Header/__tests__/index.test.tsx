@@ -1,12 +1,6 @@
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  waitForElementToBeRemoved,
-} from "@testing-library/react";
-const { default: userEvent } = require("@testing-library/user-event");
 import Header from "..";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+const { default: userEvent } = require("@testing-library/user-event");
 
 describe("Header", () => {
   test("Render snapshot", () => {
@@ -29,13 +23,15 @@ describe("Header", () => {
     expect(burgerButton).toBeInTheDocument();
     fireEvent.click(burgerButton); // click on burger button on the left
 
-    expect(screen.queryByRole("menuitem", { name: "About" })).toBeInTheDocument();
+    expect(screen.getByRole("menuitem", { name: "About" })).toBeInTheDocument();
 
     const firstChild = screen.getByRole("presentation").firstChild; // material ui clickable layer to hide menu
     expect(firstChild).toBeInTheDocument();
     firstChild && fireEvent.click(firstChild);
 
-    await waitFor(() => expect(screen.queryByRole("menuitem", { name: "About" })).toBeNull());
+    await waitFor(() =>
+      expect(screen.queryByRole("menuitem", { name: "About" })).not.toBeInTheDocument()
+    );
     expect(screen.queryByRole("menuitem", { name: "About" })).not.toBeInTheDocument();
   });
 
@@ -57,7 +53,7 @@ describe("Header", () => {
     const closeButton = screen.queryByRole("button", { name: "Close" });
     await userEvent.click(closeButton);
 
-    await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
 
     const dialogHidden = screen.queryByRole("dialog");
     expect(dialogHidden).not.toBeInTheDocument();
@@ -82,7 +78,7 @@ describe("Header", () => {
     expect(firstChild).toBeInTheDocument();
     firstChild && fireEvent.click(firstChild);
 
-    await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
 
     const dialogHidden = screen.queryByRole("dialog");
     expect(dialogHidden).not.toBeInTheDocument();

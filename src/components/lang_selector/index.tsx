@@ -25,7 +25,7 @@ const calcResult = (results: IQuizItemResult[]): ICalcResult => {
   return { right, wrong, skipped };
 };
 
-const IQuizCodeelector = () => {
+const QuizCodeSelector = () => {
   const { language, change } = useContext(LangContext);
   const { questions } = useContext(QuestionsContext);
   const answersResults = useContext(ResultsContext);
@@ -89,4 +89,4 @@ const IQuizCodeelector = () => {
   );
 };
 
-export default IQuizCodeelector;
+export default QuizCodeSelector;

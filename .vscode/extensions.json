@@ -3,7 +3,6 @@
     "esbenp.prettier-vscode",
     "dbaeumer.vscode-eslint",
     "stylelint.vscode-stylelint",
-    "silvenon.mdx",
     "firsttris.vscode-jest-runner",
     "clinyong.vscode-css-modules"
   ]

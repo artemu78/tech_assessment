@@ -1,8 +1,10 @@
 {
   "stylelint.validate": ["css", "scss"],
   "eslint.options": {
-    "rules": {
-      "prettier/prettier": "off"
+    "overrideConfig": {
+      "rules": {
+        "prettier/prettier": "off"
+      }
     }
   },
   "editor.formatOnSave": true,
