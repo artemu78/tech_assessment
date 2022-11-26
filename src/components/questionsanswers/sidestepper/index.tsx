@@ -25,7 +25,7 @@ export default function VerticalLinearStepper({ questions, language }: StepsProp
   useEffect(() => {
     const el = stepRefs.current[activeStepIndex];
     if (!el || window.innerWidth < 500) return;
-    const y = el.getBoundingClientRect().top + window.pageYOffset - 80;
+    const y = el.getBoundingClientRect().top + window.scrollY - 80;
     window.scrollTo({ top: y, behavior: "smooth" });
   }, [activeStepIndex]);
 
