@@ -7,5 +7,5 @@
       { "ignoreShorthands": ["/grid-template/"] }
     ]
   },
-  "ignoreFiles": ["coverage/**", "build/**"]
+  "ignoreFiles": ["coverage/**", "build/**","coverage-ts/**"]
 }
