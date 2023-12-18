@@ -1,7 +1,7 @@
 {
   "name": "tech_assessment",
   "homepage": "./",
-  "version": "1.0.30",
+  "version": "1.0.31",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.5",
