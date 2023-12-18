@@ -1,9 +1,0 @@
-{
-  "recommendations": [
-    "esbenp.prettier-vscode",
-    "dbaeumer.vscode-eslint",
-    "stylelint.vscode-stylelint",
-    "firsttris.vscode-jest-runner",
-    "clinyong.vscode-css-modules"
-  ]
-}
